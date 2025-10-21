@@ -11,74 +11,85 @@
   <style>
     body {
       background: linear-gradient(135deg, #6a11cb, #2575fc);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
       font-family: 'Poppins', sans-serif;
+      color: #fff;
     }
-    .game-box {
-      background-color: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
       border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      text-align: center;
-      width: 320px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
     }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    }
+
     input[type="number"] {
       text-align: center;
       font-size: 18px;
-    }
-    #result {
-      font-size: 20px;
-      font-weight: 500;
-      margin-top: 15px;
-    }
-    #score {
-      font-size: 18px;
-      margin-top: 10px;
-      color: #3d54ff;
     }
   </style>
 </head>
 <body>
 
-  <div class="game-box">
-    <h1 class="mb-3">🎯Guess The Number</h1>
-    <input type="number" id="guessnumber" class="form-control mb-3" placeholder="Enter a number (1–10)">
-    <button class="btn btn-warning w-100" onclick="check()">Check</button>
-    <p id="result" class="mt-3">Start guessing....</p>
-    <p id="score">Score: 10</p>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-11 col-sm-8 col-md-6 col-lg-4 p-4 glass-card text-center">
+
+        <h3 class="fw-bold text-light mb-4 text-nowrap">🎯 Guess The Number</h3>
+
+        <input type="number" id="guessnumber" class="form-control mb-3 text-center shadow-sm" placeholder="Enter a number (1–10)">
+        
+        <button class="btn btn-warning fw-semibold w-100 mb-3" onclick="check()">Check</button>
+        
+        <p id="result" class="fs-5 fw-medium text-light mb-1">Start guessing...</p>
+        <p id="score" class="fs-6 fw-semibold text-warning">Score: 10</p>
+
+      </div>
+    </div>
   </div>
 
   <script>
-    var scores = 10;
-    var guessnumber = document.getElementById("guessnumber");
-    var result = document.getElementById("result");
-    var score = document.getElementById("score");
-
-    var randomNumber = Math.ceil(Math.random() * 10);
+    let scores = 10;
+    const guessnumber = document.getElementById("guessnumber");
+    const result = document.getElementById("result");
+    const score = document.getElementById("score");
+    const randomNumber = Math.ceil(Math.random() * 10);
 
     function check() {
-      var enterednumber = Number(guessnumber.value);
+      const enterednumber = Number(guessnumber.value);
 
       if (enterednumber === randomNumber) {
-        result.textContent = "🎉 Right! You guessed it!";
-        result.style.color = "#00ff00";
+        result.textContent = "🎉 Correct! You guessed it!";
+        result.classList.remove("text-danger", "text-warning");
+        result.classList.add("text-success");
         alert("You Won! Final Score: " + scores);
       } 
-      else {
+      else if (enterednumber >= 1 && enterednumber <= 10) {
         scores--;
         result.textContent = "❌ Wrong! Try again.";
-        result.style.color = "#ff4d4d";
+        result.classList.remove("text-success", "text-warning");
+        result.classList.add("text-danger");
         score.textContent = "Score: " + scores;
 
         if (scores === 0) {
           alert("Game Over! The correct number was " + randomNumber);
           location.reload();
         }
+      } 
+      else {
+        result.textContent = "⚠️ Enter a number between 1 and 10!";
+        result.classList.remove("text-success", "text-danger");
+        result.classList.add("text-warning");
       }
     }
   </script>
